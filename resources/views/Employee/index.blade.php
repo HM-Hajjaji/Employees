@@ -1,0 +1,20 @@
+@extends("layouts.app")
+@section("content")
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>#</th>
+                <th>#</th>
+                <th>#</th>
+                <th>#</th>
+            </tr>
+        </thead>
+        <tbody>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tbody>
+    </table>
+@endsection
