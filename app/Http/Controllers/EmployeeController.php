@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use Illuminate\Support\Str;
 
 class EmployeeController extends Controller
 {
@@ -16,28 +17,43 @@ class EmployeeController extends Controller
     public function index()
     {
         $employees = Employee::latest()->paginate(7);
-        return view("Employee.index",compact("$employees"));
+        return view("Employee.index",compact("employees"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
-        //
+        return view("Employee.create");
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreEmployeeRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreEmployeeRequest $request)
     {
-        //
+        if ($request->hasFile("photo"))
+        {
+            $photo = time() ."_". $request->file('photo')->getClientOriginalName();
+            $path = $request->photo->storeAs('Employees', $photo, 'public');
+            Employee::create([
+                'full_name'=> $request->full_name,
+                'photo'=> $path,
+                'slag'=> Str::slug($request->full_name,"-"),
+                'registration_number'=> $request->registration_number,
+                'department'=> $request->department,
+                'address'=> $request->address,
+                'phone'=> $request->phone
+            ]);
+        }
+        else
+        {
+            Employee::create([
+                'full_name'=> $request->full_name,
+                'slag'=> Str::slug($request->full_name,"-"),
+                'registration_number'=> $request->registration_number,
+                'department'=> $request->department,
+                'address'=> $request->address,
+                'phone'=> $request->phone
+            ]);
+        }
+        return redirect()->route('employee.all')->with(['msg_add'=> 'Create employee successful']);
     }
 
     /**
