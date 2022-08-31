@@ -5,12 +5,12 @@
     @endif
     @if($employees->isEmpty())
         <div class="alert alert-light m-2" role="alert">
-            The list is empty
+            There are no employees trashed.
         </div>
     @else
         <div class="card card-primary card-outline m-2">
             <div class="card-header">
-                <h3 class="card-title">List the employees</h3>
+                <h3 class="card-title">List the employees trashed</h3>
                 <div class="card-tools">
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" placeholder="Search employee">

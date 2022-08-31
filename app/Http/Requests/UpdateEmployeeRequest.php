@@ -13,18 +13,18 @@ class UpdateEmployeeRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            //
+            'full_name' => 'required',
+            'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'registration_number' => 'required|integer|max:999999999',
+            'department' => 'required',
+            'address' => 'required',
+            'phone' => 'required|size:10'
         ];
     }
 }

@@ -28,8 +28,8 @@ Route::controller(EmployeeController::class)->prefix('employee')->group(function
     Route::get('/create',"create")->name("employee.create");
     Route::post('/store',"store")->name("employee.store");
     Route::get('/show/{id}',"show")->name("employee.show");
-    Route::get('/edit/{id}',"edit")->name("employee.edit");
-    Route::put('/update/{id}',"update")->name("employee.update");
+    Route::get('/edit/{slug}',"edit")->name("employee.edit");
+    Route::put('/update/{slug}',"update")->name("employee.update");
     Route::delete('/destroy/{slug}',"destroy")->name("employee.destroy");
     Route::get('/trashed',"trashed")->name("employee.trashed");
     Route::delete('/trashed/force/{slug}',"force_trashed")->name("employee.force_trashed");

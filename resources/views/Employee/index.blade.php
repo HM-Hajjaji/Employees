@@ -6,10 +6,12 @@
         <div class="alert alert-danger">{{session('msg_destroy')}}</div>
     @elseif(session()->has('msg_restore'))
         <div class="alert alert-primary">{{session('msg_restore')}}</div>
+    @elseif(session()->has('msg_update'))
+        <div class="alert alert-success">{{session('msg_update')}}</div>
     @endif
     @if($employees->isEmpty())
         <div class="alert alert-light m-2" role="alert">
-            The list is empty
+            There are no employees on the list
         </div>
     @else
         <div class="card card-primary card-outline m-2">
@@ -54,8 +56,8 @@
                             <td>{{$item->phone}}</td>
                             <td class="text-right py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
-                                    <a href="{{route('employee.destroy',$item->slag)}}" class="btn btn-info" title="Show"><i class="fas fa-eye"></i></a>
-                                    <a href="{{route('employee.destroy',$item->slag)}}" class="btn btn-success" title="edit"><i class="fas fa-edit"></i></a>
+                                    <a href="{{route('employee.show',$item->slag)}}" class="btn btn-info" title="Show"><i class="fas fa-eye"></i></a>
+                                    <a href="{{route('employee.edit',$item->slag)}}" class="btn btn-success" title="edit"><i class="fas fa-edit"></i></a>
                                     <form action="{{route('employee.destroy',$item->slag)}}" method="post" class="btn btn-danger">
                                         @csrf
                                         @method('DELETE')

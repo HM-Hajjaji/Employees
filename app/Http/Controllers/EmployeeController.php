@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class EmployeeController extends Controller
@@ -16,7 +17,7 @@ class EmployeeController extends Controller
 
     public function index()
     {
-        $employees = Employee::latest()->paginate(1);
+        $employees = Employee::latest()->paginate(2);
         return view("Employee.index",compact("employees"));
     }
 
@@ -28,66 +29,58 @@ class EmployeeController extends Controller
 
     public function store(StoreEmployeeRequest $request)
     {
+        $path = "";
         if ($request->hasFile("photo"))
         {
             $photo = time() ."_". $request->file('photo')->getClientOriginalName();
             $path = $request->photo->storeAs('Employees', $photo, 'public');
-            Employee::create([
-                'full_name'=> $request->full_name,
-                'photo'=> $path,
-                'slag'=> Str::slug($request->full_name,"-"),
-                'registration_number'=> $request->registration_number,
-                'department'=> $request->department,
-                'address'=> $request->address,
-                'phone'=> $request->phone
-            ]);
         }
-        else
-        {
-            Employee::create([
-                'full_name'=> $request->full_name,
-                'slag'=> Str::slug($request->full_name,"-"),
-                'registration_number'=> $request->registration_number,
-                'department'=> $request->department,
-                'address'=> $request->address,
-                'phone'=> $request->phone
-            ]);
-        }
+        Employee::create([
+            'full_name'=> $request->full_name,
+            'photo'=> $path,
+            'slag'=> Str::slug($request->full_name.$request->address,"-"),
+            'registration_number'=> $request->registration_number,
+            'department'=> $request->department,
+            'address'=> $request->address,
+            'phone'=> $request->phone
+        ]);
         return redirect()->route('employee.all')->with(['msg_add'=> 'Create employee successful']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Employee $employee)
+
+    public function show($slug)
     {
-        //
+        $employee = Employee::where('slag',$slug)->first();
+        return view('Employee.show',compact("employee"));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Employee $employee)
+
+    public function edit($slug)
     {
-        //
+        $employee = Employee::where('slag',$slug)->first();
+        return view('Employee.edit',compact("employee"));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateEmployeeRequest  $request
-     * @param  \App\Models\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateEmployeeRequest $request, Employee $employee)
+
+    public function update(UpdateEmployeeRequest $request,$slug)
     {
-        //
+        $employee = Employee::where('slag',$slug)->first();
+        $path = $employee->photo;
+        if ($request->hasFile('photo'))
+        {
+            $photo = time()."_".$request->file('photo')->getClientOriginalName();
+            $path = $request->file('photo')->storeAs('Employees',$photo,'public');
+            Storage::disk('public')->delete($employee->photo);
+        }
+        $employee->full_name = $request->full_name;
+        $employee->photo= $path;
+        $employee->slag = Str::slug($request->full_name.$request->address,"-");
+        $employee->registration_number= $request->registration_number;
+        $employee->department= $request->department;
+        $employee->address= $request->address;
+        $employee->phone= $request->phone;
+        $employee->save();
+        return redirect()->route('employee.all')->with(['msg_update'=> 'updated employee successful']);
     }
 
     public function destroy($slug)
@@ -98,12 +91,15 @@ class EmployeeController extends Controller
     }
     public function trashed()
     {
-        $employees = Employee::withTrashed()->latest()->paginate(1);
+        $employees = Employee::onlyTrashed()->latest()->paginate(2);
         return view("Employee.trashed",compact("employees"));
+
     }
     public function force_trashed($slug)
     {
-        $employee = Employee::withTrashed()->where('slag',$slug)->forceDelete();
+        $employee = Employee::withTrashed()->where('slag',$slug)->first();
+        Storage::disk('public')->delete($employee->photo);
+        $employee->forceDelete();
         return redirect()->route('employee.trashed')->with(['msg_force_delete'=> 'delete employee successful']);
     }
     public function restore($slug)
