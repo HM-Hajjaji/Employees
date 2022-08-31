@@ -33,8 +33,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa-solid fa-trash nav-icon"></i>
+                            <a href="{{route('employee.trashed')}}" class="nav-link">
+{{--                                <i class="fa-solid fa-trash nav-icon"></i>--}}
+                                <i class="fas fa-trash nav-icon"></i>
                                 <p>Trashed</p>
                             </a>
                         </li>

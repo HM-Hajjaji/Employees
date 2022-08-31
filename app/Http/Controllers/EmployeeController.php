@@ -16,7 +16,7 @@ class EmployeeController extends Controller
 
     public function index()
     {
-        $employees = Employee::latest()->paginate(7);
+        $employees = Employee::latest()->paginate(1);
         return view("Employee.index",compact("employees"));
     }
 
@@ -90,14 +90,26 @@ class EmployeeController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Employee $employee)
+    public function destroy($slug)
     {
-        //
+        $emp= Employee::where('slag',$slug)->first();
+        $emp->delete();
+        return redirect()->route('employee.all')->with(['msg_destroy'=> 'delete employee successful']);
     }
+    public function trashed()
+    {
+        $employees = Employee::withTrashed()->latest()->paginate(1);
+        return view("Employee.trashed",compact("employees"));
+    }
+    public function force_trashed($slug)
+    {
+        $employee = Employee::withTrashed()->where('slag',$slug)->forceDelete();
+        return redirect()->route('employee.trashed')->with(['msg_force_delete'=> 'delete employee successful']);
+    }
+    public function restore($slug)
+    {
+        $employee = Employee::withTrashed()->where('slag',$slug)->restore();
+        return redirect()->route('employee.all')->with(['msg_restore'=> 'Restore employee successful']);
+    }
+
 }

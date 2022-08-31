@@ -1,9 +1,11 @@
 @extends("layouts.app")
 @section("content")
-    @if(session()->has('msg'))
-        @foreach(session()->all() as $item)
-            <div class="alert alert-success">{{$item}}</div>
-        @endforeach
+    @if(session()->has('msg_add'))
+        <div class="alert alert-success">{{session('msg_add')}}</div>
+    @elseif(session()->has('msg_destroy'))
+        <div class="alert alert-danger">{{session('msg_destroy')}}</div>
+    @elseif(session()->has('msg_restore'))
+        <div class="alert alert-primary">{{session('msg_restore')}}</div>
     @endif
     @if($employees->isEmpty())
         <div class="alert alert-light m-2" role="alert">
@@ -43,18 +45,31 @@
                     @foreach($employees as $item)
                         <tr>
                             <td>{{$item->id}}</td>
-                            <td><img src="{{asset('/storage/'.$item->photo)}}" alt="employee photo"></td>
+                            <td><img class="profile-user-img img-fluid rounded border-secondary" src="{{asset('/storage/'.$item->photo)}}" alt="employee photo"></td>
                             <td>{{$item->full_name}}</td>
                             <td>{{$item->registration_number}}</td>
                             <td>{{$item->department}}</td>
                             <td>{{$item->hire_date}}</td>
                             <td>{{$item->address}}</td>
                             <td>{{$item->phone}}</td>
-                            <td></td>
+                            <td class="text-right py-0 align-middle">
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{route('employee.destroy',$item->slag)}}" class="btn btn-info" title="Show"><i class="fas fa-eye"></i></a>
+                                    <a href="{{route('employee.destroy',$item->slag)}}" class="btn btn-success" title="edit"><i class="fas fa-edit"></i></a>
+                                    <form action="{{route('employee.destroy',$item->slag)}}" method="post" class="btn btn-danger">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" title="delete" ><i class="fa fa-trash"></i></button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="card-footer">
+                {{$employees->links()}}
             </div>
         </div>
     @endif
