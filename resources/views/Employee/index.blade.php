@@ -1,13 +1,13 @@
 @extends("layouts.app")
 @section("content")
     @if(session()->has('msg_add'))
-        <div class="alert alert-success">{{session('msg_add')}}</div>
+        <div class="alert alert-success m-2 shadow">{{session('msg_add')}}</div>
     @elseif(session()->has('msg_destroy'))
-        <div class="alert alert-danger">{{session('msg_destroy')}}</div>
+        <div class="alert alert-success m-2 shadow">{{session('msg_destroy')}}</div>
     @elseif(session()->has('msg_restore'))
-        <div class="alert alert-primary">{{session('msg_restore')}}</div>
+        <div class="alert alert-success m-2 shadow">{{session('msg_restore')}}</div>
     @elseif(session()->has('msg_update'))
-        <div class="alert alert-success">{{session('msg_update')}}</div>
+        <div class="alert alert-success m-2 shadow">{{session('msg_update')}}</div>
     @endif
     @if($employees->isEmpty())
         <div class="alert alert-light m-2" role="alert">
@@ -29,31 +29,31 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover text-center ">
                     <thead>
                     <tr>
                         <th>#</th>
                         <th>Photo</th>
                         <th>Full name</th>
-                        <th>Registration number</th>
+{{--                        <th>Registration number</th>--}}
                         <th>Department</th>
-                        <th>Hire date</th>
-                        <th>Address</th>
+{{--                        <th>Hire date</th>--}}
+{{--                        <th>Address</th>--}}
                         <th>Phone</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($employees as $item)
-                        <tr>
-                            <td>{{$item->id}}</td>
-                            <td><img class="profile-user-img img-fluid rounded border-secondary" src="{{asset('/storage/'.$item->photo)}}" alt="employee photo"></td>
-                            <td>{{$item->full_name}}</td>
-                            <td>{{$item->registration_number}}</td>
-                            <td>{{$item->department}}</td>
-                            <td>{{$item->hire_date}}</td>
-                            <td>{{$item->address}}</td>
-                            <td>{{$item->phone}}</td>
+                        <tr >
+                            <td class="align-middle">{{$item->id}}</td>
+                            <td class="align-middle d-flex justify-content-center"><img class="img-md img-circle img-bordered" src="{{asset('/storage/'.$item->photo)}}" alt="employee photo"></td>
+                            <td class="align-middle">{{$item->full_name}}</td>
+{{--                            <td>{{$item->registration_number}}</td>--}}
+                            <td class="align-middle">{{$item->department}}</td>
+{{--                            <td>{{$item->hire_date}}</td>--}}
+{{--                            <td>{{$item->address}}</td>--}}
+                            <td class="align-middle">{{$item->phone}}</td>
                             <td class="text-right py-0 align-middle">
                                 <div class="btn-group btn-group-sm">
                                     <a href="{{route('employee.show',$item->slag)}}" class="btn btn-info" title="Show"><i class="fas fa-eye"></i></a>

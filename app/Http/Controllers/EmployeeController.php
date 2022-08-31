@@ -7,6 +7,7 @@ use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class EmployeeController extends Controller
 {
@@ -33,7 +34,8 @@ class EmployeeController extends Controller
         if ($request->hasFile("photo"))
         {
             $photo = time() ."_". $request->file('photo')->getClientOriginalName();
-            $path = $request->photo->storeAs('Employees', $photo, 'public');
+            Image::make($request->file('photo'))->resize(300,300)->save(public_path('/storage/Employees/'.$photo));
+            $path = 'Employees/'.$photo;
         }
         Employee::create([
             'full_name'=> $request->full_name,
@@ -69,7 +71,8 @@ class EmployeeController extends Controller
         if ($request->hasFile('photo'))
         {
             $photo = time()."_".$request->file('photo')->getClientOriginalName();
-            $path = $request->file('photo')->storeAs('Employees',$photo,'public');
+            Image::make($request->file('photo'))->resize(300,300)->save(public_path('/storage/Employees/'.$photo));
+            $path = 'Employees/'.$photo;
             Storage::disk('public')->delete($employee->photo);
         }
         $employee->full_name = $request->full_name;

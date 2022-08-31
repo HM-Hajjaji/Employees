@@ -25,7 +25,7 @@ class StoreEmployeeRequest extends FormRequest
     {
         return [
             'full_name' => 'required',
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4048',
             'registration_number' => 'required|integer|max:999999999',
             'department' => 'required',
             'address' => 'required',

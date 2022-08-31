@@ -6,7 +6,7 @@
                 <p class="lead"><strong>Hire Date : </strong> {{$employee->hire_date}}</p>
             </div>
             <div class="col-6 d-flex justify-content-end" >
-                <img src="{{asset('/storage/'.$employee->photo)}}" class="rounded w-50 shadow img-bordered" alt="employee">
+                <img src="{{asset('/storage/'.$employee->photo)}}" class="img-circle w-50 shadow img-bordered" alt="employee">
             </div>
         </div>
         <div class="card-body">
