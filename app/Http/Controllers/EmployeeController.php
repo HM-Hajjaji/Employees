@@ -22,7 +22,6 @@ class EmployeeController extends Controller
         return view("Employee.index",compact("employees"));
     }
 
-
     public function create()
     {
         return view("Employee.create");
@@ -55,7 +54,6 @@ class EmployeeController extends Controller
         $employee = Employee::where('slag',$slug)->first();
         return view('Employee.show',compact("employee"));
     }
-
 
     public function edit($slug)
     {
